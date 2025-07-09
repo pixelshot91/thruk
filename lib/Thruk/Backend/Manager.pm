@@ -1717,6 +1717,8 @@ sub _do_on_peers {
             || ($ENV{'THRUK_MODE'}//'') eq 'TEST'
             || $err =~ m/^\Qbad request:\E/gmx
         ) {
+            # die($function eq 'send_command' ? "true": "false");
+            die($c->stash->{backend_errors_handling} == DIE ? "trued": "false");
             die($err);
         }
     }
