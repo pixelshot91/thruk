@@ -13,6 +13,10 @@ Monitoring web interface for Naemon, Nagios, Icinga and Shinken.
 use warnings;
 use strict;
 use Carp qw/confess longmess/;  $Carp::MaxArgLen = 500;
+BEGIN {
+    *CORE::GLOBAL::warn = \&cluck;
+    *CORE::GLOBAL::die = \&confess;
+}
 use Cwd qw/abs_path/;
 use Data::Dumper qw/Dumper/;    $Data::Dumper::Sortkeys = 1;
 use Module::Load qw/load/;
