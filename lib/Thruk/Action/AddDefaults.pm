@@ -1117,6 +1117,7 @@ sub set_enabled_backends {
         for my $b (split(/;/mx, $ENV{'THRUK_BACKENDS'})) {
             # peer key can be name too
             if($b eq 'ALL') {
+                _debug('b is ALL');
                 for my $peer (@{$c->db->get_peers()}) {
                     $disabled_backends->{$peer->{'key'}} = 0;
                 }
@@ -1214,25 +1215,29 @@ sub set_enabled_backends {
         $disabled_backends = $c->db->disable_hidden_backends($disabled_backends, $display_too);
     }
 
+    _debug('XXX disabled_backends before group: '.Dumper($disabled_backends)) if Thruk::Base->debug;
+
     ###############################
     # groups affected?
-    if(defined $c->db()) {
-        for my $peer (@{$c->db->get_peers()}) {
-            if(defined $peer->{'groups'}) {
-                my $access = 0;
-                for my $grp (Thruk::Base::comma_separated_list($peer->{'groups'})) {
-                    if($c->user->has_group($grp)) {
-                        $access = 1;
-                        last;
-                    }
-                }
-                if(!$access) {
-                    $disabled_backends->{$peer->{'key'}} = DISABLED_AUTH;  # completely hidden
-                }
-            }
-        }
-        $c->db->disable_backends($disabled_backends);
-    }
+    # if(defined $c->db()) {
+    #     for my $peer (@{$c->db->get_peers()}) {
+    #         if(defined $peer->{'groups'}) {
+    #             my $access = 0;
+    #             for my $grp (Thruk::Base::comma_separated_list($peer->{'groups'})) {
+    #                 if($c->user->has_group($grp)) {
+    #                     $access = 1;
+    #                     last;
+    #                 }
+    #             }
+    #             if(!$access) {
+    #                 $disabled_backends->{$peer->{'key'}} = DISABLED_AUTH;  # completely hidden
+    #             }
+    #         }
+    #     }
+    #     $c->db->disable_backends($disabled_backends);
+    # }
+    _debug('XXX disabled_backends after group: '.Dumper($disabled_backends)) if Thruk::Base->debug;
+
 
     # when set by args, update
     if(defined $backends) {

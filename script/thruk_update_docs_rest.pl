@@ -24,14 +24,14 @@ $c->app->cluster->load_statefile();
 unlink(glob($c->{'config'}->{'var_path'}.'/obj_retention.*'));
 my $res = $c->sub_request('/r/config/objects', 'POST', {':TYPE' => 'host', ':FILE' => 'docs-update-test.cfg', 'name' => 'docs-update-test'});
 
-print Dumper($res);
+# print Dumper($res);
 # die("res = $res");
 
 die("request failed: ".Dumper($res)) unless(ref $res eq 'HASH' && $res->{'message'} && $res->{'message'} =~ m/objects\ successfully/mx);
 
 # get sample host and service
-my $my_test_svc = $c->sub_request('/r/services', 'GET', {'limit' => '1', 'columns' => 'host_name,description,host_groups,groups', 'host_groups[ne]' => '', 'groups[ne]' => '' });
-print Dumper($my_test_svc);
+# my $my_test_svc = $c->sub_request('/r/services', 'GET', {'limit' => '1', 'columns' => 'host_name,description,host_groups,groups', 'host_groups[ne]' => '', 'groups[ne]' => '' });
+# print Dumper($my_test_svc);
 my $test_svc = $c->sub_request('/r/services', 'GET', {'limit' => '1', 'columns' => 'host_name,description,host_groups,groups', 'host_groups[ne]' => '', 'groups[ne]' => '' })->[0] || die("need at least one service which has a hostgroup and a servicegroup");
 my $host_name           = $test_svc->{'host_name'};
 my $service_description = $test_svc->{'description'};

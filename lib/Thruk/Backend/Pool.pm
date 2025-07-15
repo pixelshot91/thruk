@@ -327,6 +327,7 @@ sub do_on_peer {
     }
 
     my $peer = $self->{'peers'}->{$key};
+    # _debug("do_on_peer: peer: $peer");
     confess("no peer for key: $key, got: ".join(', ', keys %{$self->{'peers'}})) unless defined $peer;
     if($arg_hash->{'force_type'} && $arg_hash->{'force_type'} eq 'http') {
         if(lc($peer->{'type'}) ne 'http') {

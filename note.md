@@ -25,3 +25,24 @@ Not an ARRAY reference at script/thruk_update_docs_rest.pl line 29.
 
 # THRUK_VERBOSE=4 perl -I/home/ubuntu/thruk/lib script/thruk_update_docs_rest.pl
 ```
+
+### 
+
+Need to run naemon, no need to run thruk
+
+Comment disable backend based on group
+
+
+```
+<as naemon> $ THRUK_BACKENDS='ALL' THRUK_VERBOSE=4 perl -I/mnt/thruk/lib/ script/thruk_update_docs_rest.pl
+
+[00:27:59,301][I][lib/Thruk/Utils/CLI.pm:372    ] {
+[00:27:59,301][I][lib/Thruk/Utils/CLI.pm:372    ]    "file" : "/mnt/thruk/var/api_keys/45bd1a340f17113397988d5f9077beedb2e5a7e7db6c6882edbd63a038df51e4.SHA-256",
+[00:27:59,301][I][lib/Thruk/Utils/CLI.pm:372    ]    "hashed_key" : "45bd1a340f17113397988d5f9077beedb2e5a7e7db6c6882edbd63a038df51e4",
+[00:27:59,301][I][lib/Thruk/Utils/CLI.pm:372    ]    "message" : "successfully created api key",
+[00:27:59,301][I][lib/Thruk/Utils/CLI.pm:372    ]    "private_key" : "e2eb81f9a746e3d11b3f402c895f1d9334ed6cb17609a89080540c3d76be0e68_1"
+[00:27:59,301][I][lib/Thruk/Utils/CLI.pm:372    ] }
+malformed JSON string, neither tag, array, object, number, string or atom, at character offset 0 at script/thruk_update_docs_rest.pl line 327.
+```
+
+and 'docs/documentation/rest.asciidoc' is still not updated :-(

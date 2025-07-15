@@ -1711,6 +1711,7 @@ sub _do_on_peers {
         _debug($err);
         _debug2(Carp::longmess("backend error"));
         $err = $short_err if $short_err;
+        # die("This is a test");
         $c->stash->{'backend_error'} = $err;
         if($function eq 'send_command'
             || $c->stash->{backend_errors_handling} == DIE
@@ -1718,7 +1719,11 @@ sub _do_on_peers {
             || $err =~ m/^\Qbad request:\E/gmx
         ) {
             # die($function eq 'send_command' ? "true": "false");
-            die($c->stash->{backend_errors_handling} == DIE ? "trued": "false");
+            die(DIE);
+            die($c->stash);
+            # print Dumper($c->stash);
+            # die("backend_errors_handling $backend_errors_handling");
+            die($c->stash->{backend_errors_handling} == DIE ? "die_true": "die_false");
             die($err);
         }
     }
@@ -1942,6 +1947,7 @@ sub select_backends {
         }
         elsif($peer->{'enabled'} != 1) {
             _debug("skipped peer (disabled): ".$peer->{'name'}) if Thruk::Base->trace;
+            _debug("peer = ${peer}".Dumper($peer));
             next;
         }
         push @{$get_results_for}, $peer->{'key'};
@@ -1971,7 +1977,9 @@ sub _get_result {
 
     my($result, $type, $totalsize);
     eval {
+         _debug('MYLOG: _get_result');
         if($ENV{'THRUK_NO_CONNECTION_POOL'} || $force_serial || scalar @{$peers} <= 1) {
+             _debug('MYLOG: if');
             ($result, $type, $totalsize) = $self->_get_result_serial($peers, $function, $arg);
         } else {
             ($result, $type, $totalsize) = $self->_get_result_parallel($peers, $function, $arg);
@@ -2143,9 +2151,14 @@ sub _get_result_serial {
     my ($totalsize, $result, $type) = (0);
     my $c  = $Thruk::Globals::c;
     my $t1 = [gettimeofday];
+    _debug('_get_result_serial after my');
+
+    _debug('peers: '.join(', ', @{$peers}));
+
     $c->stats->profile( begin => "_get_result_serial($function)");
 
     for my $key (@{$peers}) {
+        _debug('_get_result_serial key: $key');
         # skip already failed peers for this request
         next if $c->stash->{'failed_backends'}->{$key};
 
